@@ -41,8 +41,17 @@ Key abstraction layers:
 
 ## Eight Great Ideas
 <ol>
-  <li>Design for Moore's Law</li>
-  <li>Use abstraction to simplify design</li>
+  <li>Design for <em>Moore's Law</em>
+    <ul>
+      <li>Moore's Law states that the number of transistors on an integrated circuit doubles about every 18 to 24 months, while the cost of each of the transistors gets cheaper. Computer architects use this to advance CPU integrated circuits performance while enhancing power efficiency and maintaining the same instruction set architecture</li>
+      <li>A <em>transistor</em> is an electrical shift that controls electrical currents. The predecessor to transistors were vacuum tubes, yet transistors are much more efficient in most aspects, regarding economics, heat output, and relative performance. The fabrication of transistors has facilitated the world's pace against Moore's Law. Integrated circuits are becoming more powerful, smaller, and cheaper as a result</li>
+    </ul> 
+  </li>
+  <li>Use abstraction to simplify design
+    <ul>
+      <li></li>
+    </ul>
+  </li>
   <li>Make the common case fast</li>
   <li>Performance via parallelism</li>
   <li>Performance via pipelining</li>
