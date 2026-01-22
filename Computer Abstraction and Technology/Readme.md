@@ -87,6 +87,7 @@ Key abstraction layers:
   <li><em>Programming language, compiler, architecture</em> determine the number of machine instructions executed per operation</li>
   <li><em>Processor and memory system</em> determine how fast instructions are executed</li>
   <li><em>I/O System</em> determines how fast input/output operations are executed</li>
+</ul>
 
 ### Defining Performance
 There are two main metrics:
@@ -119,6 +120,13 @@ Clock cycles = instruction count * cycles per institution
 
 CPU time = instruction count * CPI * clock cycle time = (instruction count * CPI) / clock rate
 
+<ul>
+  <li><em>Instruction count</em> refers to the total number of machine instructions executed by a program. This is impacted by the instruction set architecture</li>
+  <li><em>CPI (cycles per instruction)</em> is the average number of clock cycles per instruction affected by cache performance</li>
+  <li><em>Clock cycle time</em> is equal to the inverse of clock rate</li>
+  <li><em>Clock rate</em> is the number of cycles per second (also known as the frequency) which is affected by power and thermals</li>
+</ul>
+
 <details>
     <summary>Example program</summary>
 
@@ -126,14 +134,109 @@ There are two computers: PC A has a cycle time of 250ps and a CPI of 2.0; PC B h
 <ul>  
   <details>
     <summary>Output</summary>
-      <pre>
-        <code>
+
 
 CPU Time A: (ISA * 2 * 250) = 500 * ISA<br />
 CPU Time B: (ISA * 1.2 * 500) = 600 * ISA<br />
 CPU A is faster by 600 / 500 = 1.2
-          </code>
-        </pre>  
+      </details>
+    </ul>  
+  </details>
+
+<details>
+    <summary>Example program</summary>
+
+<ol type="a">
+  <li>If Computer A executes a program in 14 seconds, and Computer B executes the same program in 21 seconds, how much faster is Computer A than Computer B</li>
+  <li>There are many factors that could contribute to this difference in performance between the two systems. Describe two such factors</li>
+</ol>
+<ul>  
+  <details>
+    <summary>Output</summary>
+
+<ol type="a">
+  <li>CPU Time A = 14s<br />
+  CPU Time B = 21s<br />
+  
+  21s / 14s = 1.5. Computer A is 50 percent faster than Computer B</li>
+  <li>Since the instruction count is the same for both computers, as they each execute the same program, the CPI of Computer B is likely lower than Computer A's and the clock rate of Computer B could be higher than Computer A's</li>
+</ol>
+      </details>
+    </ul>  
+  </details>
+
+#### Average CPI
+Average CPI = $\sum$(Instruction Frequency * Cycles per Instruction)
+
+  <details>
+    <summary>Example program</summary>
+
+Consider two different implementations of the same instruction set. There are three instruction types. M1 has a clock rate of 2GHz and M2 has a clock rate of 2.2GHz. The average number of cycles for each type of instruction, as well as their frequencies, are given below. Calculate the average CPI for each machine
+
+| Instruction | M1 Cycles | M2 Cycles |
+| ----------- | --------- | --------- |
+| A           | 2         | 3         |
+| B           | 3         | 2         |
+| C           | 3         | 1         |
+
+<ul>  
+  <details>
+    <summary>Output</summary>
+Average CPI M1 = (2 * 0.6 + 3 * 0.3 + 3 * 0.1) = 2.4<br />
+
+Average CPI M2 = (3 * 0.6 + 2 * 0.3 + 1 * 0.1) = 2.5
+      </details>
+    </ul>  
+  </details>
+
+  <details>
+    <summary>Example program</summary>
+
+Using the following table with the calculated average CPIs for both machines,
+
+Average CPI M1 = (2 * 0.6 + 3 * 0.3 + 3 * 0.1) = 2.4<br />
+
+Average CPI M2 = (3 * 0.6 + 2 * 0.3 + 1 * 0.1) = 2.5,
+
+determine the relative performance if the following changes are made. Assume the clock frequency and IC remain constant: M1 has a clock rate of 2GHz and M2 has a clock rate of 2.2GHz.
+
+| Instruction | M1 Cycles | M2 Cycles |
+| ----------- | --------- | --------- |
+| A           | 2         | 3         |
+| B           | 3         | 2         |
+| C           | 3         | 1         |
+
+  <ol type="a">
+    <li>Modify M1 by improving B-type instructions to a CPI of 2</li>
+    <li>Modify M2 by improving A-type instructions to a CPI of 2</li>
+  </ol>
+<ul>  
+  <details>
+    <summary>Output</summary>
+<ol type="a">
+  <li>
+CPU Time<sub>old</sub> = (IC * 2.4) / 2GHz
+
+CPI M1<sub>new</sub> = (0.60 × 2) + (0.30 × 2) + (0.10 × 3) = 2.1
+
+CPU Time<sub>new</sub> = (IC * 2.1) / 2GHz
+
+CPU Time<sub>old</sub> / CPU Time <sub>new</sub> = 2.4 / 2.1 = 1.14
+
+This modification made the computer 14% faster
+  </li>
+  <li>
+  CPU Time<sub>old</sub> = (IC * 2.5) / 2.2GHz
+
+CPI M2<sub>new</sub> = (0.60 × 2) + (0.30 × 2) + (0.10 × 1) = 1.9
+
+CPU Time<sub>new</sub> = (IC * 1.9) / 2.2GHz
+
+CPU Time<sub>old</sub> / CPU Time <sub>new</sub> = 2.5 / 1.9 = 1.32
+
+This modification made the computer 32% faster
+  </li>
+</ol>
       </details>
     </ul>  
   </details>
@@ -172,9 +275,6 @@ A compiler designer is trying to decide between two code sequences for a particu
 <ul>  
   <details>
     <summary>Output</summary>
-      <pre>
-        <code>
-
 Sequence 1: IC = 2 + 1 + 2 = 5<br />
 Clock Cycles: (2 * 1) + (1 * 2) + (2 * 3) = 10<br />
 Sequence 2: IC = 4 + 1 + 1 = 6<br />
@@ -183,8 +283,6 @@ Clock Cycles: (4 * 1) + (1 * 2) + (1 * 3) = 9<br />
 CPI = Clock Cycles / Instruction Count<br />
 CPI 1: 10 / 5 = 2<br />
 CPI 2: 9 / 6 = 1.5<br />
-          </code>
-        </pre>  
       </details>
     </ul>  
   </details>
@@ -201,8 +299,6 @@ Compilers can have a profound impact on the performance of an application. Assum
 <ul>  
   <details>
     <summary>Output</summary>
-      <pre>
-        <code>
 <ol type="a">
   <li>CPU time = instruction count * CPI * clock cycle time<br />
 
@@ -214,9 +310,7 @@ Compilers can have a profound impact on the performance of an application. Assum
   (1.2E9 * 1.25) / CRB<br />
   Clock rate B is (1.2E9 * 1.25) / (1.0E9 * 1.1) = 1.37x times faster than clock rate A 
   </li>
-</ol>
-          </code>
-        </pre>  
+</ol>  
       </details>
     </ul>  
   </details>
@@ -233,16 +327,11 @@ Suppose a new CPU has 85% of capacitive load of old CPU, 15% voltage and 15% fre
 <ul>  
   <details>
     <summary>Output</summary>
-      <pre>
-        <code>
-
 P<sub>new</sub> = (C<sub>old</sub> * 0.85) * (V<sub>old</sub> * 0.85)<sup>2</sup> * (F<sub>old</sub> * 0.85)<br />
 
 P<sub>old</sub> = C<sub>old</sub> * V<sub>old</sub> * F<sub>old</sub><br />
 
-P<sub>new</sub> / P<sub>old</sub> = 0.52
-          </code>
-        </pre>  
+P<sub>new</sub> / P<sub>old</sub> = 0.52 
       </details>
     </ul>  
   </details>
@@ -264,14 +353,9 @@ In a program multiply accounts for 80s out ot 100s. If we improve the multiply b
 <ul>  
   <details>
     <summary>Output</summary>
-      <pre>
-        <code>
 Time<sub>improved</sub> = (Time<sub>affected</sub> / improvement factor) + Time<sub>unaffected</sub><br />
 
 Time<sub>improved</sub> = (80s / 2) + (100s - 80s) = 60s
-
-          </code>
-        </pre>  
       </details>
     </ul>  
   </details>
