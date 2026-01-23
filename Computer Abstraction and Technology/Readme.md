@@ -315,6 +315,88 @@ Compilers can have a profound impact on the performance of an application. Assum
     </ul>  
   </details>
 
+#### Parallel Execution
+When instructions execute in parallel, the clock frequency remains unchanged, but the effective CPI decreases because more instructions complete pre cycle
+
+<details>
+    <summary>Example program</summary>
+
+A compiler designer is trying to decide between two code sequences for a particular computer. The hardware designers have supplied the following facts:
+
+<table border="1">
+  <tr>
+    <th>Class</th>
+    <th>A</th>
+    <th>B</th>
+    <th>C</th>
+  </tr>
+  <tr>
+    <td>CPI for class</td>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+  </tr>
+  <tr>
+    <td>IC in sequence 1</td>
+    <td>2</td>
+    <td>1</td>
+    <td>2</td>
+  </tr>
+  <tr>
+    <td>IC in sequence 2</td>
+    <td>4</td>
+    <td>1</td>
+    <td>1</td>
+  </tr>
+</table>
+
+One particular implementation of this supports executing 2 instructions of type A in parallel. What is the maximum relative performance increase one can achieve with this implementation over a mod with a CPI of 2.1 and an original with a CPI of 2.4
+<ul>  
+  <details>
+    <summary>Output</summary>
+
+Clock Cycles: ((2 * 0.6) / 2) + (3 * 0.3) + (3 * 0.1) = 1.5<br />
+
+<ol type="a">
+  <li>Performance over mod: 2.1 / 1.5 = 1.4, 40% faster</li>
+  <li>Performance over original: 2.4 / 1.5 = 1.6, 60% faster</li>
+</ol>
+      </details>
+    </ul>  
+  </details>
+
+  <details>
+    <summary>Example program</summary>
+
+CPU-A has an average CPI of 1.3 and a clock rate of 1.2GHz. CPU-B has an average CPI of 2.1 and a clock rate of 2.5GHz. We have a program, foo.exe, that we wish to run. When compiled for CPU-A, the program has exactly 1x10<sup>6</sup> instructions
+<ol type="a">
+  <li>How many instructions would the program need to have when
+compiled for CPU-B, so the execution time of the program is the
+same on both systems</li>
+  <li>If the programs had the same number of instructions on both
+systems, what should the CPI of CPU-B be so that it takes 50% as
+long as CPU-A to execute the program</li>
+  <li>We expect foo.exe to take 5 seconds to run on CPU-C, but after
+running it, it actually took 15 seconds! Name 2 factors that may have
+caused this disparity between expected time and actual time</li>
+</ol>
+</ol>
+<ul>  
+  <details>
+    <summary>Output</summary>
+
+<ol type="a">
+  <li>CPU Time A = (1.0E6 * 1.3) / 1.2GHz<br />
+  (x * 2.1) / 2.5GHz = (1.0E6 * 1.3) / 1.2GHz<br />
+  x = 1.29E6 instructions</li>
+  <li>CPI (B) / F (B) = 0.5 * (CPI (A) / f (A))<br />
+  CPI (B) = 0.5 * 1.3 * 2.5GHz * (1 / 1.2GHz) = 1.35</li>
+  <li>There could have been more than expected memory latency and incorrect assumptions about the IC or the CPI of CPU-C</li>
+</ol>
+      </details>
+    </ul>  
+  </details>
+
 ### Power
 Power = Capacitive load * Voltage<sup>2</sup> * Frequency<br />
 
@@ -346,6 +428,9 @@ Time<sub>improved</sub> = (Time<sub>affected</sub> / improvement factor) + Time<
   <li>Time<sub>unaffected</sub>: the part of the program that does not improve at all</li>
 </ul>
 
+#### Speedup
+Speedup = 1 / Time<sub>improved</sub>
+
 <details>
     <summary>Example program</summary>
 
@@ -356,6 +441,28 @@ In a program multiply accounts for 80s out ot 100s. If we improve the multiply b
 Time<sub>improved</sub> = (Time<sub>affected</sub> / improvement factor) + Time<sub>unaffected</sub><br />
 
 Time<sub>improved</sub> = (80s / 2) + (100s - 80s) = 60s
+      </details>
+    </ul>  
+  </details>
+
+  <details>
+    <summary>Example program</summary>
+
+Suppose you have a machine that executes a program consisting of 50% floating point multiply, 30% floating point divide, and the remaining 20% are from other instructions. Management wants you to make the machine 2x faster. You can make the multiply operation 10x faster OR the divide operation 4x faster. Can you meet management’s goal by making ONE improvement? If so, which one?
+
+<ul>  
+  <details>
+    <summary>Output</summary>
+
+Time<sub>improved</sub> = (Time<sub>affected</sub> / improvement factor) + Time<sub>unaffected</sub><br />
+
+<ol type="a">
+  <li>Time<sub>improved</sub> = 0.5 / 10 + 0.5 = 0.55<br />
+  Speedup = 1 / 0.55 = 1.82 which is not twice as fast</li>
+  <li>Time<sub>improved</sub> = (0.3 / 4) + 0.7 = 0.775<br />
+  Speedup = 1 / 0.775 = 1.29 which is not twice as fast<br />
+  Management's goal cannot be met with either one of those improvements</li>
+</ol>
       </details>
     </ul>  
   </details>
